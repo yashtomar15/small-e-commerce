@@ -1,10 +1,4 @@
-import { setProdsData } from "./actions"
-import {Prodtypes,Actiontype} from '../State/index';
-
-interface Statetypes{
- productsData:Array<Prodtypes>;
- displayProdData:Array<Prodtypes>
-}
+import {Actiontype,Statetypes} from '../State/index';
 
 const initstate={
 productsData:[],
@@ -16,8 +10,8 @@ export const reducer=(state:Statetypes=initstate,{type,payload}:Actiontype)=>{
     case 'SET_PRODS_DATA':{
         return {...state,productsData:payload}
     }
-    case 'SET_PRODS_DATA':{
-        return {...state,productsData:payload}
+    case 'SET_DISPLAY_PROD_DATA':{
+        return {...state,displayProdData:payload}
     }
     default:{
         return state;
