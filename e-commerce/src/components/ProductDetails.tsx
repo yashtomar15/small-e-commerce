@@ -6,13 +6,16 @@ import { ProdCont,ImageDiv,Image,DescriptionDiv,Name,Price,Description,Favourite
 import {useAppDispatch} from '../State/hooks';
 import { addFavourite, setDisplayProdsData, setProdsData } from "../Redux/actions";
 import {useNavigate} from 'react-router-dom';
+import { useToast } from '@chakra-ui/react'
 
 type currProdtypes=Prodtypes[] | never[];
 export const ProdDetails=()=>{
     const [currProd,setCurrProd]=useState<currProdtypes>([]);
     const {productsData,displayProdData,favouriteProd}=useSelector((state:any)=>state);
+    console.log(favouriteProd,'favourites details')
     const dispatch=useAppDispatch();
     const navigate=useNavigate();
+    const toast = useToast()
 
     const{id}=useParams();
     const localCurrProd =localStorage.getItem('currProd');
@@ -31,18 +34,26 @@ export const ProdDetails=()=>{
         }
     },[])
 
-    const handleFavouriteAdd= ()=>{
+    const handleFavouriteAdd=async ()=>{
         let existedFavouriteProd= localStorage.getItem('favouriteProds') || '[]';
         if(currProd[0]){
-            const index=favouriteProd.indexOf(currProd[0]);
-            if(index===-1){
+            let isPresent=false;
+            favouriteProd.forEach((prod:Prodtypes) => {
+                if(prod._id===currProd[0]._id){
+                isPresent=true;
+                }
+            });
+
+            console.log(isPresent,'found');
+            if(!isPresent){
                 const updateFavoriteProd=[...favouriteProd,currProd[0]];
                 dispatch(addFavourite(updateFavoriteProd));
-                existedFavouriteProd=JSON.parse(existedFavouriteProd);
+                existedFavouriteProd= await JSON.parse(existedFavouriteProd);
                 localStorage.setItem('favouriteProds',JSON.stringify([...existedFavouriteProd,currProd[0]]));
             }
 
         }
+      handleToast("Item is Added to favourites");
     }
 
     const handleRemove=async ()=>{ 
@@ -57,8 +68,18 @@ export const ProdDetails=()=>{
    dispatch(setProdsData(updateProdData));
    dispatch(setDisplayProdsData(updateDisplayProdData));
    navigate('/');
+   handleToast('Product is deleted succesfully');
     }
 
+    const handleToast=(title:string)=>{
+        toast({
+            title: title,
+            position: 'top',
+            status:'success',
+            duration:3000,
+            isClosable: true,
+          })
+    }
 console.log(currProd);
     return (<>
  {currProd[0] && currProd.map((prod)=>{

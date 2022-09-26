@@ -13,16 +13,18 @@ z-index:100;
 export const NavLink=styled(Link)`
 text-decoration:none;
 color:white;
-font-size:25px;
+font-size:23px;
 font-weight:600;
 padding-top:10px;
+font-family: 'Inter Tight', sans-serif;
 `
 export const CreateButton=styled.button`
-background-color:#333333 ;
+background-color:#66cbe9 ;
 border-radius:5px;
 color:white;
 height:40px;
 margin-top:10px;
 padding-left:15px; 
 padding-right:15px; 
+font-family: 'Inter Tight', sans-serif;
 `

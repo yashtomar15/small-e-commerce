@@ -6,6 +6,8 @@ justify-content:space-between;
 gap:20px;
 width:95%;
 margin:auto;
+position:relative;
+top:70px;
 `
 export const ImageDiv=styled.div`
 width:90%;

@@ -83,8 +83,8 @@ const handleChange=(e:any)=>{
             <IconDiv><MdFilterList /></IconDiv> <Span>Filter</Span></FilterButton> }  
       <div>
         {/* Mobile filter dialog */}
-        <Transition.Root show={mobileFiltersOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
+        <Transition.Root show={mobileFiltersOpen} as={Fragment} >
+        <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen} >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -107,8 +107,8 @@ const handleChange=(e:any)=>{
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-                  <div className="flex items-center justify-between px-4">
+                <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl" style={{position:'relative',top:'60px'}}>
+                  <div className="flex items-center justify-between px-4" >
                     <h2 className="text-lg font-medium text-gray-900">Filters</h2>
                     <button
                       type="button"
@@ -150,6 +150,7 @@ const handleChange=(e:any)=>{
                                       type="checkbox"
                                       defaultChecked={option.checked}
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                      onChange={handleChange}
                                     />
                                     <label
                                       htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
@@ -175,7 +176,7 @@ const handleChange=(e:any)=>{
         {/* <button onClick={handleFilter}>Filters</button> */}
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pt-24 pb-6">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">New Arrivals</h1>
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">Products</h1>
 
           </div>
           <section aria-labelledby="products-heading" className="pt-6 pb-24">
@@ -231,7 +232,7 @@ const handleChange=(e:any)=>{
               {/* Product grid */}
               <div className="lg:col-span-5">
                 {/* Replace with your content */}
-                <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" style={{marginLeft:"30px"}}>
+                <div className="h-96 rounded-lg border-2  border-gray-200 lg:h-full" style={{marginLeft:"30px"}}>
                 <ProductList displayProdData={displayProdData} />
                 </div>
                 {/* /End replace */}

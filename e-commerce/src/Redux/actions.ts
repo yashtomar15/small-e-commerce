@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { SET_PRODS_DATA,SET_DISPLAY_PROD_DATA ,SET_CATEGORIES, ADD_FAVOURITE} from "./actiontypes";
-import {Prodtypes,Actiontypes, Categorytypes, CategoryOptionstype} from '../State/index';
+import {Prodtypes,Actiontypes, Categorytypes, CategoryOptionstype, StringProdtypes} from '../State/index';
 import { Dispatch } from 'redux';
 
 export const setProdsData=(payload:Array<Prodtypes>):Actiontypes=>{
@@ -23,8 +23,8 @@ export const setCategories=(payload:Array<CategoryOptionstype>):Actiontypes=>{
       payload
    }
 }
-
-export const addFavourite=(payload:Array<Prodtypes>):Actiontypes=>{
+type FavouritePayloadtyp=Array<Prodtypes>|Array<string>
+export const addFavourite=(payload:Array<string>):Actiontypes=>{
    return{
       type:ADD_FAVOURITE ,
       payload
@@ -55,11 +55,20 @@ export const addFavourite=(payload:Array<Prodtypes>):Actiontypes=>{
      .catch((err)=>console.log("error occured",err));
    }
 
-   export const addProduct=(token:string,payload:Prodtypes)=>(dispatch:Dispatch<Actiontypes>)=>{
-      axios.post('https://upayments-studycase-api.herokuapp.com/api/products/',   {headers: {authorization:`Bearer ${token}`},body:payload})
+   export const addProduct=(token:string,payload:Prodtypes|{})=>(dispatch:Dispatch<Actiontypes>):void=>{
+      console.log('inside addproducts')
+      axios.post('https://upayments-studycase-api.herokuapp.com/api/products/', payload,  {headers: {authorization:`Bearer ${token}`}})
      .then((res)=>{
-      // console.log(res.data,'response');
-      getProducts(token);
+      console.log(res.data,'post response');
+      // Update data 
+      axios.get('https://upayments-studycase-api.herokuapp.com/api/products/',   {headers: {authorization:`Bearer ${token}`}})
+      .then((res)=>{
+         console.log(res.data,'response');
+         dispatch(setProdsData(res.data.products));
+         dispatch(setDisplayProdsData(res.data.products));
+ 
+      })
      })
      .catch((err)=>console.log("error occured",err));
    }
+

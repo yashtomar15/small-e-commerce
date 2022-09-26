@@ -12,6 +12,7 @@ import {
   } from '@chakra-ui/react'
 import {CreateButton} from '../styledComponents/navbar.styled';
 import {useAppDispatch} from '../State/hooks';
+import { addProduct } from '../Redux/actions';
 
 export function CreateScreen() {
     const [payload,setPayload]=React.useState({});
@@ -20,12 +21,16 @@ export function CreateScreen() {
     const initialRef = React.useRef(null)
     const finalRef = React.useRef(null)
     const dispatch=useAppDispatch();
-    
+    const token ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRvbWFyeWFzaDE1QGdtYWlsLmNvbSIsImdpdGh1YiI6Imh0dHBzOi8vZ2l0aHViLmNvbS95YXNodG9tYXIxNSIsImlhdCI6MTY2NDAxOTg4OCwiZXhwIjoxNjY0NDUxODg4fQ.g6u5LezG7jl2beyTDoVRf5Yk1sZIcU7ZiouOTMfqRXY';
+
     const handleChange=(e:any)=>{
       setPayload({...payload,[e.target.name]:e.target.value});
     }
     const handleSubmit=(e:any)=>{
-      
+        if(payload){
+            dispatch(addProduct(token,payload));
+        }
+        // console.log(payload);
     }
     return (
       <>
@@ -43,12 +48,12 @@ export function CreateScreen() {
             <ModalBody pb={6}>
                 <Flex>
                 <FormControl>
-                <FormLabel>First name</FormLabel>
+                <FormLabel>Product name</FormLabel>
                 <Input onChange={handleChange} type={'text'} ref={initialRef} required placeholder='Enter name' name="name"/>
               </FormControl>
   
               <FormControl>
-                <FormLabel>Last name</FormLabel>
+                <FormLabel>Price</FormLabel>
                 <Input onChange={handleChange} type={'text'} required placeholder='Enter price' name="price"/>
               </FormControl>
                 </Flex>
@@ -73,14 +78,14 @@ export function CreateScreen() {
   
               <FormControl>
                 <FormLabel>Devoloper Email</FormLabel>
-                <Input onChange={handleChange} type={'eamil'} required placeholder='Enter Email' name="email" />
+                <Input onChange={handleChange} type={'eamil'} required placeholder='Enter Email' name="developerEmail" />
               </FormControl>
                 </Flex>
             </ModalBody>
   
             <ModalFooter>
               <Button colorScheme='blue' mr={3} onClick={handleSubmit}> 
-                Save
+                Submit
               </Button>
               <Button onClick={onClose}>Cancel</Button>
             </ModalFooter>

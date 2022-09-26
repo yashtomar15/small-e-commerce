@@ -22,3 +22,8 @@ font-size:30px;
 export const NavLink=styled(Link)`
 text-decoration:none;
 `
+
+export const TopSpace=styled.div`
+
+// margin-top:100px;
+`

@@ -11,6 +11,19 @@ export interface Prodtypes{
     __v:number
 }
 
+export interface StringProdtypes{
+    "_id":string;
+    "name":string;
+    "avatar":string;
+    "description":string;
+    "price":number;
+    "category":string;
+    "developerEmail":string;
+    "createdAt":string;
+    "updatedAt":string;
+    "__v":number
+}
+
 export interface Categorytypes{
     _id:string;
     name:string;
@@ -26,7 +39,7 @@ export interface CategoryOptionstype{
 
 export interface Actiontypes{
     type:string;
-    payload:Array<Prodtypes> | Array<CategoryOptionstype>
+    payload:Array<Prodtypes> | Array<CategoryOptionstype> |Array<string>
 }
 
 export interface Statetypes{
