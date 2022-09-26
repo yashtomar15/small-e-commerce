@@ -1,16 +1,12 @@
-import Example from "./components/accordian"
 import { Home } from "./components/Home"
 import { Navbar } from "./components/Navbar"
 import { MainRouter } from "./MainRouter"
-
+import './App.css';
 function App() {
 
   return (<>
-    {/* <Navbar /> */}
-    <Example />
-    <input type={'checkbox'} />
-    <input type={'checkbox'} />
-    {/* <MainRouter/> */}
+    <Navbar />
+    <MainRouter/>
     </> )
 }
 

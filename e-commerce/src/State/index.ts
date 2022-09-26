@@ -11,9 +11,22 @@ export interface Prodtypes{
     __v:number
 }
 
-export interface Actiontype{
+export interface Categorytypes{
+    _id:string;
+    name:string;
+    createdAt:string;
+    updatedAt:string;
+    __v:number
+}
+export interface CategoryOptionstype{
+    value:string;
+    label:string;
+    checked:boolean;
+}
+
+export interface Actiontypes{
     type:string;
-    payload:Array<Prodtypes>
+    payload:Array<Prodtypes> | Array<CategoryOptionstype>
 }
 
 export interface Statetypes{

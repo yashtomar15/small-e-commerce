@@ -9,7 +9,7 @@ export const MainRouter=()=>{
     <Routes>
         <Route path='/' element={<Home />}></Route>
         <Route path='/favourite' element={<Favourite />}></Route>
-        <Route path='/proddetails' element={<ProdDetails />}></Route>
+        <Route path='/proddetails/:id' element={<ProdDetails />}></Route>
     </Routes>
     </>)
 }

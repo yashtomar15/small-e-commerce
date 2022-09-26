@@ -1,78 +1,86 @@
-/*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { Fragment, useState,useEffect } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
+import { ProductList } from './Productlist';
+import { CategoryOptionstype, Prodtypes } from '../State';
+import {useSelector,useDispatch} from 'react-redux';
+import {useAppDispatch} from '../State/hooks';
+import { setDisplayProdsData } from '../Redux/actions';
+import { FilterButton,IconDiv,Span } from '../styledComponents/Home.styled';
+import {MdFilterList} from 'react-icons/md';
 
-
-const filters = [
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
-  },
-]
-
-// function classNames(...classes:any[]) {
-//   return classes.filter(Boolean).join(' ')
-// }
-
-export default function Example() {
+interface FiltetrPropsType{
+    categoryOptions:Array<CategoryOptionstype>;
+  }
+  
+export default function Products({categoryOptions}:FiltetrPropsType) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [ navOpen, setNavOpen ] = useState(true);
-  const widths = [0, 500, 850];
+  const [isFilterShow, setIsFilterShow ] = useState(window.innerWidth<=1023);
+  const [filterCats,setfilterCats]=useState(['']);
+  const {productsData,displayProdData}=useSelector((state:any)=>state);
+
+  const dispatch=useAppDispatch();
 
   const handleFilter=()=>{
     setMobileFiltersOpen(!mobileFiltersOpen);
   }
 
+  useEffect(()=>{
+    console.log(filterCats);
+    // filtering products
+    filterProducts();
 
-useEffect(() => {
-  const x = window.matchMedia("(min-width: 700px)")
-  function myFunction(e:any) {
-    setNavOpen(false);
-    console.log('oksdf')
-  };
-  x.addListener(myFunction)
-  return () => x.removeListener(myFunction);
-}, []);
-
-//   function resizeFn() {
-//     if (window.innerWidth>=widths[0] && window.innerWidth<widths[1]) {
-//     red();
-//     } else if (window.innerWidth>=widths[1] && window.innerWidth<widths[2]) {
-//     orange();
-//     } else {
-//     green();
-//     }
-//     }
-//     window.onresize = resizeFn;
-    // resizeFn();
+    // check screensize for show filter ui
+    function handleResize() {
+      // console.log('resized to: ', window.innerWidth, 'x', window.innerHeight)
+      if(window.innerWidth<=1023){
+        console.log('true');
+          setIsFilterShow(true);
+      }else if(window.innerWidth>=1024){
+          setIsFilterShow(false);
+      }
     
+  }
+  
+    window.addEventListener('resize', handleResize)
+  },[filterCats])
+
+  const filterProducts=async ()=>{
+    if(filterCats.length<=1){
+      dispatch(setDisplayProdsData(productsData));
+    }else{
+      const filterProd=productsData.filter((prod:Prodtypes)=>{
+        return filterCats.indexOf(prod.category)!==-1;
+      })
+      // console.log(filterProd,'filter prod');
+          dispatch(setDisplayProdsData(filterProd.reverse()));
+    }
+  }
+  
+const handleChange=(e:any)=>{
+ console.log(e.target.value);
+ const index=filterCats.indexOf(e.target.value);
+ if(index===-1){
+  setfilterCats([...filterCats,e.target.value]);
+ }else{
+  const updatedFilterCat=filterCats.filter((cat)=>cat!==e.target.value);
+  setfilterCats(updatedFilterCat);
+ }
+  }
+
+  const filters = [
+    {
+      id: 'category',
+      name: 'Category',
+      options: categoryOptions,
+    },
+  ]
 
   return (
     <div className="bg-white" >
+                {isFilterShow && <FilterButton className='filterButton' onClick={handleFilter} >
+            <IconDiv><MdFilterList /></IconDiv> <Span>Filter</Span></FilterButton> }  
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -172,7 +180,7 @@ useEffect(() => {
           </div>
           <section aria-labelledby="products-heading" className="pt-6 pb-24">
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-6">
               {/* Pc Filters */}
               <form className="hidden lg:block">
                 {filters.map((section) => (
@@ -202,6 +210,7 @@ useEffect(() => {
                                   type="checkbox"
                                   defaultChecked={option.checked}
                                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  onChange={handleChange}
                                 />
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}
@@ -220,9 +229,11 @@ useEffect(() => {
               </form>
 
               {/* Product grid */}
-              <div className="lg:col-span-3">
+              <div className="lg:col-span-5">
                 {/* Replace with your content */}
-                <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" />
+                <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" style={{marginLeft:"30px"}}>
+                <ProductList displayProdData={displayProdData} />
+                </div>
                 {/* /End replace */}
               </div>
             </div>

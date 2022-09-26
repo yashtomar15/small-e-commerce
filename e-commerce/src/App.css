@@ -1,3 +1,22 @@
+.filterButton{
+  position:fixed;
+  top:510px;
+}
+.ProductContRelative{
+  position: relative;
+  top: -95px;
+}
+
+@media screen and (max-height: 844px) {
+  .filterButton{
+    position:fixed;
+    top:510px;
+  }
+}
+
+/* 
+
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -38,4 +57,4 @@
 
 .read-the-docs {
   color: #888;
-}
+} */
